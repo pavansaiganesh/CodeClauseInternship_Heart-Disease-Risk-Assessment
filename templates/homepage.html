@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top:20px;
+            margin-bottom:20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1 1 calc(50% - 10px);
+            margin-right: 20px;
+        }
+
+        .form-group:last-child {
+            margin-right: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <form id="predictionForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="sex">Sex (0 for female, 1 for male):</label>
+                    <input type="number" id="sex" name="sex" min="0" max="1" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cp">Chest Pain Type:</label>
+                    <input type="number" id="cp" name="cp" required>
+                </div>
+                <div class="form-group">
+                    <label for="trestbps">Resting Blood Pressure:</label>
+                    <input type="number" id="trestbps" name="trestbps" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="chol">Cholesterol:</label>
+                    <input type="number" id="chol" name="chol" required>
+                </div>
+                <div class="form-group">
+                    <label for="fbs">Fasting Blood Sugar (> 120 mg/dl):</label>
+                    <input type="number" id="fbs" name="fbs" min="0" max="1" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="restecg">Resting Electrocardiographic Results:</label>
+                    <input type="number" id="restecg" name="restecg" required>
+                </div>
+                <div class="form-group">
+                    <label for="thalach">Maximum Heart Rate Achieved:</label>
+                    <input type="number" id="thalach" name="thalach" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="exang">Exercise Induced Angina:</label>
+                    <input type="number" id="exang" name="exang" min="0" max="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="oldpeak">ST Depression Induced by Exercise:</label>
+                    <input type="number" id="oldpeak" name="oldpeak" step="0.01" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="slope">Slope of the Peak Exercise ST Segment:</label>
+                    <input type="number" id="slope" name="slope" required>
+                </div>
+                <div class="form-group">
+                    <label for="ca">Number of Major Vessels (0-3) Colored by Flourosopy:</label>
+                    <input type="number" id="ca" name="ca" min="0" max="3" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="thal">Thalassemia:</label>
+                    <input type="number" id="thal" name="thal" required>
+                </div>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+            fetch('/disease_pred', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = data.result;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
